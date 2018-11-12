@@ -129,7 +129,7 @@ def key_expansion(keyMatrix) :
     keyMatrix - list of lists with 4 rows and 4 columns.
     """
     counter = 4
-    while(counter <= 44):
+    while(counter <= 39):
         # For words that are divisible by 4
         if(counter % 4 == 0):
             word = []
@@ -143,20 +143,41 @@ def key_expansion(keyMatrix) :
             for i in range(len(word)):
                 word[i] = hex(word[i])
 
+            round_constant = int(2**((counter-4)/4))
+            t = int(word[0], 16) ^ round_constant
+            word[0] = hex(t)
+            #print(word)
 
+            keyMatrix[0].append(hex(int(keyMatrix[0][counter-4], 16) ^ int(word[0], 16)).replace("0x", ""))
+            keyMatrix[1].append(hex(int(keyMatrix[1][counter-4], 16) ^ int(word[1], 16)).replace("0x", ""))
+            keyMatrix[2].append(hex(int(keyMatrix[2][counter-4], 16) ^ int(word[2], 16)).replace("0x", ""))
+            keyMatrix[3].append(hex(int(keyMatrix[3][counter-4], 16) ^ int(word[3], 16)).replace("0x", ""))
 
+            for i in keyMatrix:
+                print(i)
+            print()
+            # keyMatrix[0][i+1] = word[0]
+            # keyMatrix[1][i+1] = word[1]
+            # keyMatrix[2][i+1] = word[2]
+            # keyMatrix[3][i+1] = word[3]
+            
+        else: 
+            keyMatrix[0].append(hex(int(keyMatrix[0][counter-4], 16) ^ int(keyMatrix[0][counter-1], 16)).replace("0x", ""))
+            keyMatrix[1].append(hex(int(keyMatrix[1][counter-4], 16) ^ int(keyMatrix[1][counter-1], 16)).replace("0x", ""))
+            keyMatrix[2].append(hex(int(keyMatrix[2][counter-4], 16) ^ int(keyMatrix[2][counter-1], 16)).replace("0x", ""))
+            keyMatrix[3].append(hex(int(keyMatrix[3][counter-4], 16) ^ int(keyMatrix[3][counter-1], 16)).replace("0x", ""))
+            for i in keyMatrix:
+                print(i)
 
-        
-        keyMatrix[0].append(hex(int(keyMatrix[0][counter-4], 16) ^ int(keyMatrix[0][counter-1], 16)).replace("0x", ""))
-        keyMatrix[1].append(hex(int(keyMatrix[1][counter-4], 16) ^ int(keyMatrix[1][counter-1], 16)).replace("0x", ""))
-        keyMatrix[2].append(hex(int(keyMatrix[2][counter-4], 16) ^ int(keyMatrix[2][counter-1], 16)).replace("0x", ""))
-        keyMatrix[3].append(hex(int(keyMatrix[3][counter-4], 16) ^ int(keyMatrix[3][counter-1], 16)).replace("0x", ""))
+        print("!!!!!!!!!!!!!!!!!!!!", counter, "!!!!!!!!!!!!!!!!!!!!!!")
+
 
         counter += 1
 
-    for i in range(4):
-        print(keyMatrix[i][0], keyMatrix[i][1], keyMatrix[i][2], keyMatrix[i][3])
-    
+    # for i in range(4):
+    #     print(keyMatrix[i][0], keyMatrix[i][1], keyMatrix[i][2], keyMatrix[i][3])
+
+    print(keyMatrix[0][39], keyMatrix[1][39], keyMatrix[2][39], keyMatrix[3][39])
 
     pass
 
@@ -175,7 +196,7 @@ if __name__ == "__main__" :
     ## (number before the colon) of format using 2 digits padding with a 0 if necessary
     ## (this is what the 02 means) and in hexadecimal (the x).
 
-    key = "1a005012be1000c 00120403407100001"
+    key = "1a 00 50 12 be 10 00 c0 01 20 40 34 07 10 00 01"
     key_matrix = generate_key_matrix_from_key(key)
     key_expansion(key_matrix)
     
