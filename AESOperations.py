@@ -1,4 +1,6 @@
 # Put your names here in this comment.
+# David Maldonado
+# Liam Dolly
 
 # HINTS:
 # You can specify an integer using hexadecimal in Python in the same
@@ -92,9 +94,6 @@ def mix_columns(state):
                     result ^= (int(state[k][j], 16) <<
                                1) ^ int(state[k][j], 16)
             matrix[i][j] = hex(result).replace("0x", "")
-            
-    for i in matrix:
-        print(i)
 
     return matrix
 
@@ -158,8 +157,7 @@ def key_expansion(keyMatrix):
             keyMatrix[3].append(
                 hex(int(keyMatrix[3][counter-4], 16) ^ int(word[3], 16)).replace("0x", ""))
 
-            for i in keyMatrix:
-                print(i)
+
 
         else:
             keyMatrix[0].append(hex(int(keyMatrix[0][counter-4], 16)
@@ -170,10 +168,9 @@ def key_expansion(keyMatrix):
                                     ^ int(keyMatrix[2][counter-1], 16)).replace("0x", ""))
             keyMatrix[3].append(hex(int(keyMatrix[3][counter-4], 16)
                                     ^ int(keyMatrix[3][counter-1], 16)).replace("0x", ""))
-            for i in keyMatrix:
-                print(i)
-
-        print("!!!!!!!!!!!!!!!!!!!!", counter, "!!!!!!!!!!!!!!!!!!!!!!")
+            # uncomment to print eat keyMatrix round
+            # for i in keyMatrix:
+            #     print(i)
 
         counter += 1
 
@@ -194,9 +191,14 @@ if __name__ == "__main__":
     # (this is what the 02 means) and in hexadecimal (the x).
 
     # Key Expansion testing
-    # key = "1a 00 50 12 be 10 00 c0 01 20 40 34 07 10 00 01"
-    # key_matrix = generate_key_matrix_from_key(key)
-    # key_expanded = key_expansion(key_matrix)
+    key = "1a 00 50 12 be 10 00 c0 01 20 40 34 07 10 00 01"
+    key_matrix = generate_key_matrix_from_key(key)
+    key_expanded = key_expansion(key_matrix)
+    print("Key Expansion")
+    for i in key_expanded:
+        print(i)
+
+    print()
 
     # Test for generate, byte_sub, shift_rows, and mix_columns
     key = "08 32 64 46 10 a1 00 e1 35 74 25 35 a6 40 10 13"
@@ -204,5 +206,8 @@ if __name__ == "__main__":
     sbox_matrix = byte_substitution(key_matrix)
     shifted_matrix = shift_rows(sbox_matrix)
     mixed_matrix = mix_columns(shifted_matrix)
+    print("Mix Columns")
+    for i in mixed_matrix:
+        print(i)
 
     pass
