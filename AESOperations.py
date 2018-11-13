@@ -41,7 +41,6 @@ def byte_substitution(state):
         # potential errors for key_expansion lookup
         for j in range(len(state[i])):
             state[i][j] = hex(sbox[int(state[i][j], 16)])
-
     return state
 
 
@@ -84,17 +83,16 @@ def mix_columns(state):
             for k in range(4):
 
                 if(x[i][k] == 1):
-                    result += int(state[k][j], 16)
+                    result ^= int(state[k][j], 16)
 
                 if(x[i][k] == 2):
-                    result += int(state[k][j], 16) << 1
+                    result ^= int(state[k][j], 16) << 1
 
                 if(x[i][k] == 3):
-                    result += (int(state[k][j], 16) <<
+                    result ^= (int(state[k][j], 16) <<
                                1) ^ int(state[k][j], 16)
-            matrix[i][j] = result
-
-    print()
+            matrix[i][j] = hex(result).replace("0x", "")
+            
     for i in matrix:
         print(i)
 
@@ -119,13 +117,6 @@ def generate_key_matrix_from_key(keyAsInteger):
         for j in range(4):
             matrix[j][i] = y[counter]
             counter += 1
-
-    # Testing XOR
-    # hex1 = int(matrix[0][0], 16)
-    # hex2 = int(matrix[0][1], 16)
-    # print(hex(hex1 ^ hex2).replace("0x", ""))
-    # for i in matrix:
-    #     print(i)
 
     return matrix
 
@@ -157,7 +148,6 @@ def key_expansion(keyMatrix):
             round_constant = int(2**((counter-4)/4))
             t = int(word[0], 16) ^ round_constant
             word[0] = hex(t)
-            # print(word)
 
             keyMatrix[0].append(
                 hex(int(keyMatrix[0][counter-4], 16) ^ int(word[0], 16)).replace("0x", ""))
@@ -170,7 +160,6 @@ def key_expansion(keyMatrix):
 
             for i in keyMatrix:
                 print(i)
-            print()
 
         else:
             keyMatrix[0].append(hex(int(keyMatrix[0][counter-4], 16)
